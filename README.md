@@ -1,10 +1,16 @@
+# vue-management-website
+
+实现简单的管理平台
+
+vue-cli+vue+vuex+vue-router+axios+element-ui
+
 # bcm_vue
 
 > A Vue.js project
 
 ## Build Setup
 
-``` bash
+```bash
 # install dependencies
 npm install
 
