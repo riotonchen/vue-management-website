@@ -1,4 +1,4 @@
-# vue-management-platform
+# vue-management-website
 
 实现简单的管理平台
 
