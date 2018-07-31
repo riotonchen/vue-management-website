@@ -108,7 +108,7 @@ export default {
 .head-wrap .container .el-main .head-icon {
   float: right;
   margin-right: 20px;
-  color: #5a5a5a;
+  color: #737373;
 }
 .head-wrap .container .el-main .head-icon i {
   font-size: 22px;
@@ -117,10 +117,10 @@ export default {
   vertical-align: middle;
 }
 .head-wrap .container .el-main .head-icon img {
-  max-width: 32px;
-  max-height: 32px;
+  max-width: 40px;
+  max-height: 40px;
   border-radius: 50%;
-  margin-right: 20px;
+  margin: 0 20px 0 10px;
   vertical-align: middle;
 }
 @media (max-width: 768px) {
