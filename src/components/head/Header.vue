@@ -1,16 +1,50 @@
 <template>
   <div class="head-wrap">
     <el-container class="container">
-      <el-aside width="230px">
+      <el-aside width="210px">
         <div class="head-logo">
-          <img src="/static//img/logo.png"
-               alt="">
+          <img src="/static/img/logo.png">
         </div>
       </el-aside>
       <el-main>
         <div class="head-title">
           <span>{{ selectedMenu }}</span>
         </div>
+        <div class="head-icon">
+          <img src="/static/img/avatar.png">
+        </div>
+        <div class="head-icon">
+          <el-tooltip class="item"
+                      effect="dark"
+                      content="登出"
+                      placement="bottom">
+            <i class="el-icon-menuicon-logout"></i>
+          </el-tooltip>
+        </div>
+        <div class="head-icon">
+          <el-tooltip class="item"
+                      effect="dark"
+                      content="帮助"
+                      placement="bottom">
+            <i class="el-icon-menuicon-question-circle"></i>
+          </el-tooltip>
+        </div>
+        <div class="head-icon">
+          <el-tooltip class="item"
+                      effect="dark"
+                      content="刷新"
+                      placement="bottom">
+            <i class="el-icon-menuicon-reload"></i>
+          </el-tooltip>
+        </div>
+        <!-- <div class="head-icon">
+          <el-tooltip class="item"
+                      effect="dark"
+                      content="用户"
+                      placement="bottom">
+            <i class="el-icon-menuicon-user1"></i>
+          </el-tooltip>
+        </div> -->
       </el-main>
     </el-container>
   </div>
@@ -38,7 +72,7 @@ export default {
 </script>
 <style lang="">
 .head-wrap {
-  height: 80px;
+  height: 60px;
   width: 100%;
   position: fixed;
   top: 0;
@@ -46,23 +80,48 @@ export default {
   left: 0;
   z-index: 1000;
   background-color: #fff;
-  border-bottom: solid 1px #e6e6e6;
+  border-bottom: 1px solid #e6e6e6;
 }
 .head-wrap .container {
-  height: 80px;
+  height: 60px;
 }
 .head-wrap .container .el-aside {
   overflow: hidden !important;
 }
 .head-wrap .container .head-logo img {
   height: 40px;
-  margin: 20px 20px;
+  margin: 10px 20px;
 }
 .head-wrap .container .head-title {
-  font-size: 1.7rem;
+  font-size: 1.462rem;
   font-weight: 600;
-  line-height: 40px;
+  /* line-height: 60px; */
   color: #404040;
+  padding: 0 20px;
+  float: left;
+}
+.head-wrap .container .el-main {
+  padding: 0 !important;
+  overflow: hidden !important;
+  line-height: 60px;
+}
+.head-wrap .container .el-main .head-icon {
+  float: right;
+  margin-right: 20px;
+  color: #5a5a5a;
+}
+.head-wrap .container .el-main .head-icon i {
+  font-size: 22px;
+  font-weight: 800;
+  cursor: pointer;
+  vertical-align: middle;
+}
+.head-wrap .container .el-main .head-icon img {
+  max-width: 32px;
+  max-height: 32px;
+  border-radius: 50%;
+  margin-right: 20px;
+  vertical-align: middle;
 }
 @media (max-width: 768px) {
   .head-wrap {

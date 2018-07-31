@@ -1,10 +1,11 @@
 <template>
   <el-scrollbar class="menu-wrap">
+    <div class="menu-title">菜单</div>
     <el-menu router
              :default-active="$route.path"
              :collapse="isCollapse"
-             class="el-menu-vertical-demo"
-             text-color="#696969">
+             text-color="#696969"
+             background-color="#f5f5f5">
       <menu-tree :menuData="this.menuData"></menu-tree>
     </el-menu>
   </el-scrollbar>
@@ -44,29 +45,35 @@ export default {
 </script>
 <style lang="">
 .menu-wrap {
-  width: 230px;
-  margin-top: 81px;
+  width: 210px;
   position: fixed;
-  top: 0;
+  top: 61px;
   bottom: 0;
   left: 0;
   z-index: 999;
-  background-color: #fff;
+  border-right: 1px solid #e6e6e6;
+  background-color: #f5f5f5;
   -webkit-transition: all 0.2s ease;
   transition: all 0.2s ease;
 }
-.menu-wrap .el-menu-vertical-demo {
-  padding-top: 20px;
+.menu-wrap .el-menu {
+  border-right: none !important;
 }
-.menu-wrap .el-submenu__title,
+.menu-wrap .menu-title {
+  padding: 30px 0 0 20px;
+  color: #b0b0b0;
+  line-height: 30px;
+  font-weight: 600;
+}
+/* .menu-wrap .el-submenu__title,
 .menu-wrap .el-menu-item {
   font-size: 15px !important;
-}
+} */
 @media (max-width: 768px) {
   .menu-wrap {
     width: 63px;
   }
-  .menu-wrap .el-menu-vertical-demo .el-submenu__title span {
+  .menu-wrap .el-submenu__title span {
     display: none;
   }
 }
