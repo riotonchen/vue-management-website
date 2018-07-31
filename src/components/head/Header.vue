@@ -120,6 +120,7 @@ export default {
   max-width: 40px;
   max-height: 40px;
   border-radius: 50%;
+  cursor: pointer;
   margin: 0 20px 0 10px;
   vertical-align: middle;
 }
