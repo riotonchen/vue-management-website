@@ -127,10 +127,14 @@ export default {
   .head-wrap {
     background-color: #4285f4;
   }
-  .head-wrap .container .el-aside {
+  .head-wrap .container .el-aside,
+  .head-wrap .container .head-title {
     display: none;
   }
-  .head-wrap .container .head-title {
+  .head-wrap .container .el-main .head-icon {
+    float: left;
+  }
+  .head-wrap .container .el-main .head-icon i {
     color: #fff;
   }
 }
