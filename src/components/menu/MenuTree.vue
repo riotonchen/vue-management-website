@@ -6,7 +6,8 @@
                         v-if="menu.isSubMenu">
                 <template slot="title">
                     <i :class="menu.icon_class"></i>
-                    <span slot="title">{{menu.name}}</span>
+                    <span slot="title"
+                          class="menu-font">{{menu.name}}</span>
                 </template>
                 <menu-tree :menuData="menu.childLists"></menu-tree>
             </el-submenu>
@@ -14,7 +15,8 @@
                           :key="menu.id"
                           v-else>
                 <i :class="menu.icon_class"></i>
-                <span slot="title">{{menu.name}}</span>
+                <span slot="title"
+                      class="menu-font">{{menu.name}}</span>
             </el-menu-item>
         </template>
     </div>

@@ -1,6 +1,6 @@
 <template>
   <el-scrollbar class="menu-wrap">
-    <div class="menu-title">菜单</div>
+    <div class="menu-title menu-font">菜单</div>
     <el-menu router
              :default-active="$route.path"
              :collapse="isCollapse"
@@ -63,12 +63,8 @@ export default {
   padding: 30px 0 0 20px;
   color: #b0b0b0;
   line-height: 30px;
-  font-weight: 600;
+  font-size: 13px;
 }
-/* .menu-wrap .el-submenu__title,
-.menu-wrap .el-menu-item {
-  font-size: 15px !important;
-} */
 @media (max-width: 768px) {
   .menu-wrap {
     width: 63px;

@@ -8,7 +8,7 @@
       </el-aside>
       <el-main>
         <div class="head-title">
-          <span>{{ selectedMenu }}</span>
+          <span class="title-font">{{ selectedMenu }}</span>
         </div>
         <div class="head-icon">
           <img src="/static/img/avatar.png">
@@ -18,7 +18,8 @@
                       effect="dark"
                       content="登出"
                       placement="bottom">
-            <i class="el-icon-menuicon-logout"></i>
+            <i class="el-icon-menuicon-logout"
+               @click="logout"></i>
           </el-tooltip>
         </div>
         <div class="head-icon">
@@ -34,7 +35,8 @@
                       effect="dark"
                       content="刷新"
                       placement="bottom">
-            <i class="el-icon-menuicon-reload"></i>
+            <i class="el-icon-menuicon-reload"
+               @click="refresh"></i>
           </el-tooltip>
         </div>
         <!-- <div class="head-icon">
@@ -65,7 +67,18 @@ export default {
       return this.$route.name
     }
   },
-  methods: {},
+  methods: {
+    refresh () {
+      location.reload()
+    },
+    logout () {
+      sessionStorage.removeItem('user')
+      sessionStorage.removeItem('password')
+      this.$router.push({
+        path: '/login'
+      })
+    }
+  },
   created () { },
   mounted () { }
 }
@@ -93,9 +106,6 @@ export default {
   margin: 10px 20px;
 }
 .head-wrap .container .head-title {
-  font-size: 1.462rem;
-  font-weight: 600;
-  /* line-height: 60px; */
   color: #404040;
   padding: 0 20px;
   float: left;
