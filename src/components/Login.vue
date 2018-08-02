@@ -23,6 +23,7 @@
           </el-form-item>
           <el-form-item>
             <el-button type="primary"
+                       :loading="isLogining"
                        @click="login('loginForm')">登录</el-button>
           </el-form-item>
           <el-form-item>
@@ -43,7 +44,8 @@ export default {
       loginForm: {
         user: 'admin',
         password: 'admin'
-      }
+      },
+      isLogining: false
     }
   },
   watch: {},
@@ -52,16 +54,20 @@ export default {
     login (formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          sessionStorage.setItem('user', this.loginForm.user)
-          sessionStorage.setItem('password', this.loginForm.password)
-          this.$message({
-            message: '登陆成功！',
-            duration: 1200,
-            type: 'success'
-          })
-          this.$router.push({
-            path: '/main'
-          })
+          this.isLogining = true
+          setTimeout(() => {
+            this.isLogining = false
+            sessionStorage.setItem('user', this.loginForm.user)
+            sessionStorage.setItem('password', this.loginForm.password)
+            this.$router.push({
+              path: '/main'
+            })
+            this.$message({
+              message: '登陆成功！',
+              duration: 1200,
+              type: 'success'
+            })
+          }, 1200)
         } else {
           console.error('error submit!!')
           return false

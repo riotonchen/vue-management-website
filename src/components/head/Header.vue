@@ -8,7 +8,7 @@
       </el-aside>
       <el-main>
         <div class="head-title">
-          <span class="title-font">{{ selectedMenu }}</span>
+          <span class="menu-font">{{ selectedMenu }}</span>
         </div>
         <div class="head-icon">
           <img src="/static/img/avatar.png">
@@ -92,8 +92,8 @@ export default {
   right: 0;
   left: 0;
   z-index: 1000;
-  background-color: #fff;
-  border-bottom: 1px solid #e6e6e6;
+  background-color: #f2f6fc;
+  border-bottom: 1px solid #dcdfe6;
 }
 .head-wrap .container {
   height: 60px;
@@ -106,9 +106,11 @@ export default {
   margin: 10px 20px;
 }
 .head-wrap .container .head-title {
-  color: #404040;
   padding: 0 20px;
   float: left;
+}
+.head-wrap .container .head-title span {
+  font-size: 1.5rem;
 }
 .head-wrap .container .el-main {
   padding: 0 !important;

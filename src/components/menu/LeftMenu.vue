@@ -4,8 +4,8 @@
     <el-menu router
              :default-active="$route.path"
              :collapse="isCollapse"
-             text-color="#696969"
-             background-color="#f5f5f5">
+             text-color="#606266"
+             background-color="#F2F6FC">
       <menu-tree :menuData="this.menuData"></menu-tree>
     </el-menu>
   </el-scrollbar>
@@ -51,8 +51,8 @@ export default {
   bottom: 0;
   left: 0;
   z-index: 999;
-  border-right: 1px solid #e6e6e6;
-  background-color: #f5f5f5;
+  border-right: 1px solid #dcdfe6;
+  background-color: #f2f6fc;
   -webkit-transition: all 0.2s ease;
   transition: all 0.2s ease;
 }
@@ -61,9 +61,13 @@ export default {
 }
 .menu-wrap .menu-title {
   padding: 30px 0 0 20px;
-  color: #b0b0b0;
+  color: #909399;
   line-height: 30px;
   font-size: 13px;
+}
+.menu-wrap .el-menu .el-submenu__title i,
+.el-menu-item i {
+  color: #606266;
 }
 @media (max-width: 768px) {
   .menu-wrap {
