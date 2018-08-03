@@ -20,8 +20,7 @@
                            :sortable="col.sortable"
                            align="center">
           </el-table-column>
-          <el-table-column prop="operation"
-                           label="操作"
+          <el-table-column label="操作"
                            align="center">
             <template slot-scope="scope">
               <el-button v-for="btn in operatBtns"
@@ -58,82 +57,87 @@ export default {
     return {
       header: '迁移任务',
       showTasks: true,
-      cols: [{
-        type: 'selection',
-        width: 30
-      },
-      {
-        propName: 'name',
-        labelName: '名称',
-        sortable: true
-      },
-      {
-        propName: 'status',
-        labelName: '状态',
-        sortable: true
-      },
-      {
-        propName: 'workMachine',
-        labelName: '工作机',
-        sortable: true
-      },
-      {
-        propName: 'disMachine',
-        labelName: '灾备机',
-        sortable: true
-      },
-      {
-        propName: 'owner',
-        labelName: '所有者',
-        sortable: true
-      }],
-      operatBtns: [{
-        name: '启动',
-        operate: 'start'
-      }, {
-        name: '停止',
-        operate: 'stop'
-      }, {
-        name: '删除',
-        operate: 'delete'
-      }],
-      table_migration: [{
-        name: '迁移任务1',
-        status: '迁移完成',
-        workMachine: '192.168.1.1',
-        disMachine: '192.168.1.2',
-        owner: 'sys'
-      }, {
-        name: '迁移任务2',
-        status: '迁移失败',
-        workMachine: '192.168.2.1',
-        disMachine: '192.168.2.2',
-        owner: 'admin'
-      }, {
-        name: '迁移任务3',
-        status: '迁移失败',
-        workMachine: '192.168.2.1',
-        disMachine: '192.168.2.2',
-        owner: 'admin'
-      }, {
-        name: '迁移任务4',
-        status: '迁移失败',
-        workMachine: '192.168.2.1',
-        disMachine: '192.168.2.2',
-        owner: 'admin'
-      }, {
-        name: '迁移任务5',
-        status: '迁移完成',
-        workMachine: '192.168.2.1',
-        disMachine: '192.168.2.2',
-        owner: 'admin'
-      }, {
-        name: '迁移任务6',
-        status: '迁移失败',
-        workMachine: '192.168.2.1',
-        disMachine: '192.168.2.2',
-        owner: 'admin'
-      }]
+      cols: [
+        {
+          type: 'selection',
+          width: 30
+        },
+        {
+          propName: 'name',
+          labelName: '名称',
+          sortable: true
+        },
+        {
+          propName: 'status',
+          labelName: '状态',
+          sortable: true
+        },
+        {
+          propName: 'workMachine',
+          labelName: '工作机',
+          sortable: true
+        },
+        {
+          propName: 'disMachine',
+          labelName: '灾备机',
+          sortable: true
+        },
+        {
+          propName: 'owner',
+          labelName: '所有者',
+          sortable: true
+        }
+      ],
+      operatBtns: [
+        {
+          name: '启动',
+          operate: 'start'
+        }, {
+          name: '停止',
+          operate: 'stop'
+        }, {
+          name: '删除',
+          operate: 'delete'
+        }],
+      table_migration: [
+        {
+          name: '迁移任务1',
+          status: '迁移完成',
+          workMachine: '192.168.1.1',
+          disMachine: '192.168.1.2',
+          owner: 'sys'
+        }, {
+          name: '迁移任务2',
+          status: '迁移失败',
+          workMachine: '192.168.2.1',
+          disMachine: '192.168.2.2',
+          owner: 'admin'
+        }, {
+          name: '迁移任务3',
+          status: '迁移失败',
+          workMachine: '192.168.2.1',
+          disMachine: '192.168.2.2',
+          owner: 'admin'
+        }, {
+          name: '迁移任务4',
+          status: '迁移失败',
+          workMachine: '192.168.2.1',
+          disMachine: '192.168.2.2',
+          owner: 'admin'
+        }, {
+          name: '迁移任务5',
+          status: '迁移完成',
+          workMachine: '192.168.2.1',
+          disMachine: '192.168.2.2',
+          owner: 'admin'
+        }, {
+          name: '迁移任务6',
+          status: '迁移失败',
+          workMachine: '192.168.2.1',
+          disMachine: '192.168.2.2',
+          owner: 'admin'
+        }
+      ]
     }
   },
   watch: {},

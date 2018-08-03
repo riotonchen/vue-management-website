@@ -14,7 +14,7 @@ export default {
 #app {
   height: 100%;
 }
-.el-scrollbar__wrap {
+#app .el-scrollbar__wrap {
   overflow-x: hidden !important;
 }
 </style>
