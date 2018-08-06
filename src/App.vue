@@ -17,4 +17,10 @@ export default {
 #app .el-scrollbar__wrap {
   overflow-x: hidden !important;
 }
+.el-loading-spinner .path {
+  stroke: #eee;
+}
+.el-loading-spinner .el-loading-text {
+  color: #eee;
+}
 </style>

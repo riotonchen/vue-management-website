@@ -18,6 +18,7 @@ const get = (url, param) => {
   })
 }
 
+/* eslint-disable */
 // 发送post请求(返回一个Promise)
 const post = (url, params) => {
   return new Promise((resolve, reject) => {
