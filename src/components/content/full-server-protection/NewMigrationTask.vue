@@ -365,14 +365,29 @@ export default {
         }
         // 判断是需要复制目录还是不需要复制目录
         if (this.isFilePathNeedCopy) {
-          this.bascForm.table_sync.push(path)
+          if (!this.isDirSelected(filePath.label, this.bascForm.table_sync)) {
+            this.bascForm.table_sync.push(path)
+          }
         } else {
-          this.bascForm.table_noSync.push(path)
+          if (!this.isDirSelected(filePath.label, this.bascForm.table_noSync)) {
+            this.bascForm.table_noSync.push(path)
+          }
         }
       })
       // 关闭之前清空选中
       this.$refs.selectDirTree.setCheckedNodes([])
       this.showSelectDirDialog = false
+    },
+    /* 判断目录是否已选 */
+    isDirSelected (filePath, arr) {
+      let isSelected = false
+      for (const e of arr) {
+        if (e.sourceDirPath === filePath) {
+          isSelected = true
+          break
+        }
+      }
+      return isSelected
     },
     /* 删除表中选择的复制目录 */
     deleteSourceDirPath (index, row, isFilePathNeedCopy) {
