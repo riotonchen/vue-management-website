@@ -69,14 +69,15 @@
               </el-table-column>
               <el-table-column :label="'灾备机目标路径' + '(' + bascForm.disMachine + ')'">
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.targetDirPath"></el-input>
+                  <el-input :class="{'empty-input':scope.row.targetDirPath === ''}"
+                            v-model="scope.row.targetDirPath">
+                  </el-input>
                 </template>
               </el-table-column>
             </el-table>
           </el-form-item>
           <el-form-item class="title-item"
-                        label="不要复制的目录和文件："
-                        :rules="$validateRules({ required: true, requiredItem: '不要复制的目录和文件' })"></el-form-item>
+                        label="不要复制的目录和文件："></el-form-item>
           <el-form-item class="bascForm-noSync-item">
             <el-table class="bascForm-noSync-table"
                       ref="bascForm_noSync_table"
@@ -192,7 +193,7 @@
                style="margin:30px 0 20px 0"
                @click="newTask(['bascForm', 'netForm', 'migrationForm'])"
                v-loading.fullscreen.lock="isLoading"
-               element-loading-text="正在提交任务信息"
+               element-loading-text="正在进行服务器迁移检查"
                element-loading-background="rgba(0, 0, 0, 0.5)">提交</el-button>
     <el-button size="small"
                @click="backToTasks">返回</el-button>
@@ -202,9 +203,9 @@
                :before-close="closeDialog"
                append-to-body>
       <el-tree ref="selectDirTree"
-               :data="data"
+               :data="treeData"
                :props="props"
-               node-key="label"
+               node-key="content"
                show-checkbox>
       </el-tree>
       <span slot="footer"
@@ -217,7 +218,8 @@
       </span>
     </el-dialog>
     <check-result :checkResult="checkResult"
-                  @resubmit="newTask(['bascForm', 'netForm', 'migrationForm'])"></check-result>
+                  @resubmit="newTask(['bascForm', 'netForm', 'migrationForm'])"
+                  @returnTasksList="backToTasks"></check-result>
   </div>
 </template>
 
@@ -227,61 +229,74 @@ export default {
   components: { checkResult },
   data () {
     return {
-      checkResult: {
-        show: false
-      },
-      isLoading: false,
-      data: [{
+      // tree数据
+      treeData: [{
         label: 'C:\\',
+        content: 'C:\\',
         children: [{
           label: 'Program Files',
+          content: 'C:\\Program Files',
           children: [
             {
               label: 'MySQL',
-              children: [{ label: 'MySQL Server 5.5' }]
+              content: 'C:\\Program Files\\MySQL',
+              children: [{ label: 'MySQL Server 5.5', content: 'C:\\Program Files\\MySQL\\MySQL Server 5.5' }]
             },
             {
               label: 'Git',
+              content: 'C:\\Program Files\\Git',
               children: [{ label: 'bin',
-                children: [{ label: 'bash' }] }]
+                content: 'C:\\Program Files\\Git\\bin',
+                children: [{ label: 'bash', content: 'C:\\Program Files\\Git\\bin\\bash' }] }]
             }
           ]
         }, {
           label: 'Program Files (x86)',
+          content: 'C:\\Program Files (x86)',
           children: [
             {
               label: 'Google',
-              children: [{ label: 'Chrome' }]
+              content: 'C:\\Program Files (x86)\\Google',
+              children: [{ label: 'Chrome', content: 'C:\\Program Files (x86)\\Google\\Chrome' }]
             },
             {
               label: 'Internet Explorer',
+              content: 'C:\\Program Files (x86)\\Internet Explorer',
               children: [{ label: 'zh-CN',
-                children: [{ label: 'ieinstal.exe.mui' }] }]
+                content: 'C:\\Program Files (x86)\\Internet Explorer\\zh-CN',
+                children: [{ label: 'ieinstal.exe.mui', content: 'C:\\Program Files (x86)\\Internet Explorer\\zh-CN\\ieinstal.exe.mui' }] }]
             }
           ]
         }, {
           label: 'Windows',
+          content: 'C:\\Windows',
           children: [
             {
               label: 'addins',
-              children: [{ label: 'FXSEXT.ecf' }]
+              content: 'C:\\Windows\\addins',
+              children: [{ label: 'FXSEXT.ecf', content: 'C:\\Windows\\addins\\FXSEXT.ecf' }]
             },
             {
               label: 'appcompat',
+              content: 'C:\\Windows\\appcompat',
               children: [{ label: 'appraiser',
-                children: [{ label: 'APPRAISER_TelemetryBaseline_RS5' }] }]
+                content: 'C:\\Windows\\appcompat\\appraiser',
+                children: [{ label: 'APPRAISER_TelemetryBaseline_RS5', content: 'C:\\Windows\\appcompat\\appraiser\\APPRAISER_TelemetryBaseline_RS5' }] }]
             }
           ]
         }, {
           label: 'Users',
+          content: 'C:\\Users',
           children: [
             {
               label: 'Administrator',
-              children: [{ label: 'AppData' }]
+              content: 'C:\\Users\\Administrator',
+              children: [{ label: 'AppData', content: 'C:\\Users\\Administrator\\AppData' }]
             },
             {
               label: 'Default',
-              children: [{ label: 'Desktop' }]
+              content: 'C:\\Users\\Default',
+              children: [{ label: 'Desktop', content: 'C:\\Users\\Default\\Desktop' }]
             }
           ]
         }]
@@ -290,8 +305,12 @@ export default {
         children: 'children',
         label: 'label'
       },
-      showSelectDirDialog: false,
-      isFilePathNeedCopy: null,
+      checkResult: {
+        show: false // 是否打开服务器迁移检查列表
+      },
+      isLoading: false, // 是否遮罩
+      showSelectDirDialog: false, // 是否显示选择目录的Dialog
+      isFilePathNeedCopy: null, // 判断表格为需要同步复制的表格还是不需要同步复制的表格
       // 默认选中的tab
       activeTab: 'basic',
       // 基本设置表单
@@ -354,22 +373,24 @@ export default {
         .then(_ => {
           done()
         })
-        .catch(_ => { })
+        .catch(error => {
+          console.error(error)
+        })
     },
     /* 选择目录 */
     selectDirDown () {
       this.$refs.selectDirTree.getCheckedNodes().forEach(filePath => {
         let path = {
-          sourceDirPath: filePath.label, // 工作机源目录
-          targetDirPath: '' // 灾备机目标目录
+          sourceDirPath: filePath.content, // 工作机源目录
+          targetDirPath: filePath.content // 灾备机目标目录
         }
         // 判断是需要复制目录还是不需要复制目录
         if (this.isFilePathNeedCopy) {
-          if (!this.isDirSelected(filePath.label, this.bascForm.table_sync)) {
+          if (!this.isDirSelected(filePath.content, this.bascForm.table_sync)) {
             this.bascForm.table_sync.push(path)
           }
         } else {
-          if (!this.isDirSelected(filePath.label, this.bascForm.table_noSync)) {
+          if (!this.isDirSelected(filePath.content, this.bascForm.table_noSync)) {
             this.bascForm.table_noSync.push(path)
           }
         }
@@ -401,8 +422,17 @@ export default {
     backToTasks () {
       this.$emit('back')
     },
+    /* 提交表单 */
     newTask (formArr) {
+      // 校验灾备机目标路径是否为空
+      for (const filePath of this.bascForm.table_sync) {
+        if (!filePath.targetDirPath) {
+          this.$message.error('灾备机目标路径不能为空！')
+          return
+        }
+      }
       this.isLoading = true
+      // 校验结果：promise对象
       const resultArr = []
       formArr.forEach(item => {
         resultArr.push(this.checkForm(item))
@@ -412,7 +442,7 @@ export default {
           setTimeout(() => {
             this.isLoading = false
             this.checkResult.show = true
-          }, 1000)
+          }, 2000)
           console.log('表单验证通过!')
           console.log(this.bascForm)
           console.log(this.netForm)
@@ -461,5 +491,11 @@ export default {
 .bascForm-noSync-table,
 .netForm-NICMapping-table {
   width: 700px;
+  min-width: 500px;
+}
+.empty-input input,
+.empty-input input:focus,
+.empty-input input:hover {
+  border-color: #f56c6c;
 }
 </style>

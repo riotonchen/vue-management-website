@@ -1,6 +1,6 @@
 <template>
   <div class="col-md-12">
-    <el-card>
+    <el-card :class="showTasks ? 'tasks-card' : ''">
       <div slot="header"
            class="mg-header">{{ header }}</div>
       <div v-show="showTasks">
@@ -9,6 +9,7 @@
                   tooltip-effect="dark"
                   style="width: 100%"
                   max-height="500"
+                  header-cell-class-name="header-cell"
                   :row-class-name="tableRowClassName"
                   @selection-change="changeSelection">
           <el-table-column v-for="col in cols"
@@ -21,26 +22,34 @@
                            align="center">
           </el-table-column>
           <el-table-column label="操作"
+                           width="300"
                            align="center">
             <template slot-scope="scope">
               <el-button v-for="btn in operatBtns"
+                         :class="btn.class ? btn.class : 'table-btn'"
+                         :type="btn.type"
                          :key="btn.operate"
-                         @click.native.prevent="btnOperate(btn.operate, scope.$index, scope.row)"
-                         type="text"
-                         size="small">{{ btn.name }}</el-button>
+                         :icon="btn.icon"
+                         :title="btn.name"
+                         size="mini"
+                         circle
+                         @click.native.prevent="btnOperate(btn.operate, scope.$index, scope.row)">
+              </el-button>
             </template>
           </el-table-column>
         </el-table>
         <el-button type="primary"
                    size="small"
-                   style="margin:30px 0 20px 0"
+                   style="margin:30px 0 20px 20px"
                    @click="showTasks = false;header = '新建迁移任务'">新建</el-button>
         <el-button type="danger"
                    size="small">删除</el-button>
-        <el-button type="primary"
+        <el-button type="success"
                    size="small">启动</el-button>
-        <el-button type="primary"
+        <el-button type="warning"
                    size="small">停止</el-button>
+        <el-button type="info"
+                   size="small">刷新</el-button>
       </div>
       <migration-task v-if="!showTasks"
                       @back="showTasks = true;header = '迁移任务'"></migration-task>
@@ -60,7 +69,7 @@ export default {
       cols: [
         {
           type: 'selection',
-          width: 30
+          width: 80
         },
         {
           propName: 'name',
@@ -91,13 +100,34 @@ export default {
       operatBtns: [
         {
           name: '启动',
-          operate: 'start'
+          operate: 'start',
+          type: 'primary',
+          icon: 'el-icon-menuicon-start'
         }, {
           name: '停止',
-          operate: 'stop'
+          operate: 'stop',
+          type: 'warning',
+          icon: 'el-icon-menuicon-icon--'
         }, {
           name: '删除',
-          operate: 'delete'
+          operate: 'delete',
+          type: 'danger',
+          icon: 'el-icon-delete'
+        }, {
+          name: '查看',
+          operate: 'view',
+          type: 'info',
+          icon: 'el-icon-view'
+        }, {
+          name: '迁移',
+          operate: 'migration',
+          type: 'success',
+          icon: 'el-icon-menuicon-swap'
+        }, {
+          name: '重启',
+          operate: 'restart',
+          class: 'table-btn restart-btn',
+          icon: 'el-icon-menuicon-reload'
         }],
       table_migration: [
         {
@@ -168,24 +198,64 @@ export default {
           console.log('delete' + ' row ' + index + '-----' + JSON.stringify(row))
           this.delete(index, row)
           break
+        case 'view':
+          console.log('view' + ' row ' + index + '-----' + JSON.stringify(row))
+          this.view(index, row)
+          break
+        case 'migration':
+          console.log('migration' + ' row ' + index + '-----' + JSON.stringify(row))
+          this.migration(index, row)
+          break
+        case 'restart':
+          console.log('restart' + ' row ' + index + '-----' + JSON.stringify(row))
+          this.restart(index, row)
+          break
         default:
           break
       }
     },
     start (index, row) { },
     stop (index, row) { },
-    delete (index, row) { }
+    delete (index, row) { },
+    view (index, row) { },
+    migration (index, row) { },
+    restart (index, row) { }
   },
   created () { },
   mounted () { }
 }
 </script>
 <style lang="">
+.tasks-card .el-card__body {
+  padding: 20px 0;
+}
 .mg-header {
   font-size: 18px;
   font-weight: 600;
 }
-.el-table .failed-row {
+.table-btn i {
+  font-size: 12px;
+}
+.restart-btn:focus,
+.restart-btn:hover {
+  background: #a58fe2;
+  border-color: #a58fe2;
+  color: #fff;
+}
+.restart-btn,
+.restart-btn:active {
+  color: #fff;
+  background: #8f75da;
+  border-color: #8f75da;
+  outline: 0;
+}
+.header-cell {
+  font-family: 'menufont' !important;
+  font-weight: 400;
+  font-size: 15px;
+}
+
+/* .el-table .failed-row {
   background: #f39d9d85;
 }
 
@@ -194,5 +264,5 @@ export default {
 }
 .el-table--enable-row-hover .el-table__body tr:hover > td {
   background-color: inherit !important;
-}
+} */
 </style>

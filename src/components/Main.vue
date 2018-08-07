@@ -32,6 +32,7 @@ export default {
 }
 .content {
   padding: 25px;
+  min-width: 715px;
 }
 @media (max-width: 768px) {
   .content-wrap {
