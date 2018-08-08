@@ -1,5 +1,5 @@
 <template>
-  <el-scrollbar>
+  <el-scrollbar style="height: 100%;">
     <el-row type="flex"
             class="row-bg mg-top100"
             justify="center"
@@ -83,15 +83,13 @@ export default {
 }
 </script>
 <style lang="">
-.el-scrollbar {
-  height: 100%;
-}
 .mg-top100 {
   margin-top: 10%;
 }
 .login-wrap {
   width: 350px;
   padding: 10px 30px;
+  margin: 30px;
   border-radius: 5px;
   background: #fff;
   border: 1px solid #eaeaea;
