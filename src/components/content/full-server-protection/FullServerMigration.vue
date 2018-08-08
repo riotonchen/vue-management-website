@@ -1,6 +1,6 @@
 <template>
   <div class="col-md-12">
-    <el-card :class="showTasks ? 'tasks-card' : ''">
+    <el-card :class="showTasks ? 'tasks-card' : 'newTask-card'">
       <div slot="header"
            class="mg-header">{{ header }}</div>
       <div v-show="showTasks">
