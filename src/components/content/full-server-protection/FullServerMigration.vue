@@ -4,24 +4,58 @@
       <div slot="header"
            class="mg-header">{{ header }}</div>
       <div v-show="showTasks">
+        <div class="search-wrap">
+          <el-input v-model="searchContent"
+                    suffix-icon="el-icon-search"
+                    placeholder="请输入搜索内容"
+                    size="small"
+                    clearable>
+            <el-select v-model="searchLabel"
+                       slot="prepend"
+                       placeholder="请选择"
+                       @change="searchContent = ''">
+              <el-option label="名称"
+                         value="name"></el-option>
+              <el-option label="状态"
+                         value="status"></el-option>
+              <el-option label="工作机"
+                         value="workMachine"></el-option>
+              <el-option label="灾备机"
+                         value="disMachine"></el-option>
+              <el-option label="所有者"
+                         value="owner"></el-option>
+            </el-select>
+          </el-input>
+        </div>
         <el-table ref="migration_table"
-                  :data="table_migration"
+                  :data="table_migration.slice((currentPage - 1) * pageSize, currentPage * pageSize)"
                   tooltip-effect="dark"
                   style="width: 100%"
                   header-cell-class-name="header-cell"
                   :row-class-name="tableRowClassName"
                   :row-key="getRowKey"
                   @selection-change="handleSelectionChange">
-          <el-table-column v-for="col in cols"
-                           :type="col.type"
-                           :width="col.width"
-                           :key="col.propName"
-                           :prop="col.propName"
-                           :label="col.labelName"
-                           :sortable="col.sortable"
-                           :reserve-selection="col.reserve"
+          <template v-for="col in cols">
+            <el-table-column v-if="col.status !== 'status'"
+                             :type="col.type"
+                             :width="col.width"
+                             :key="col.propName"
+                             :prop="col.propName"
+                             :label="col.labelName"
+                             :sortable="col.sortable"
+                             :reserve-selection="col.reserve"
+                             align="center">
+            </el-table-column>
+
+          </template>
+          <!-- <el-table-column label="状态"
                            align="center">
-          </el-table-column>
+            <template slot-scope="scope">
+              <el-progress :stroke-width="18"
+                           :text-inside="true"
+                           :percentage="parseInt(Math.random() * 100)"></el-progress>
+            </template>
+          </el-table-column> -->
           <el-table-column label="操作"
                            width="300"
                            align="center">
@@ -57,7 +91,7 @@
                        :page-sizes="[5, 10, 15, 20]"
                        :page-size="pageSize"
                        layout="total, sizes, prev, pager, next, jumper"
-                       :total="total">
+                       :total="total()">
         </el-pagination>
       </div>
       <migration-task v-if="!showTasks"
@@ -71,16 +105,29 @@ import migrationTask from '@/components/content/full-server-protection/NewMigrat
 export default {
   components: { migrationTask },
   props: {},
-  created () {
-    this.getTasks()
+  created () { },
+  watch: {
+    searchContent: function (val, oldVal) {
+      this.table_migration = this.table_data.filter(item => ~item[this.searchLabel].toLowerCase().indexOf(this.searchContent.toLowerCase()))
+      this.currentPage = 1
+      this.pageSize = 5
+    }
   },
   data () {
     return {
       header: '迁移任务',
       showTasks: true,
+      searchLabel: 'name',
+      searchContent: '',
       currentPage: 1,
       pageSize: 5,
-      total: 40,
+      total () {
+        if (this.table_migration) {
+          return this.table_migration.length
+        } else {
+          return 0
+        }
+      },
       multipleSelection: [],
       getRowKey (row) {
         return row.id
@@ -149,7 +196,7 @@ export default {
           class: 'table-btn restart-btn',
           icon: 'el-icon-menuicon-reload'
         }],
-      table_data: [
+      table_migration: [
         {
           id: 0,
           name: '迁移任务1',
@@ -432,7 +479,289 @@ export default {
           owner: 'admin'
         }
       ],
-      table_migration: []
+      table_data: [
+        {
+          id: 0,
+          name: '迁移任务1',
+          status: '迁移完成',
+          workMachine: '192.168.1.1',
+          disMachine: '192.168.1.2',
+          owner: 'sys'
+        }, {
+          id: 1,
+          name: '迁移任务2',
+          status: '迁移失败',
+          workMachine: '192.168.2.1',
+          disMachine: '192.168.2.2',
+          owner: 'admin'
+        }, {
+          id: 2,
+          name: '迁移任务3',
+          status: '迁移失败',
+          workMachine: '192.168.2.1',
+          disMachine: '192.168.2.2',
+          owner: 'admin'
+        }, {
+          id: 3,
+          name: '迁移任务4',
+          status: '迁移失败',
+          workMachine: '192.168.2.1',
+          disMachine: '192.168.2.2',
+          owner: 'admin'
+        }, {
+          id: 4,
+          name: '迁移任务5',
+          status: '迁移完成',
+          workMachine: '192.168.2.1',
+          disMachine: '192.168.2.2',
+          owner: 'admin'
+        }, {
+          id: 5,
+          name: '迁移任务6',
+          status: '迁移失败',
+          workMachine: '192.168.2.1',
+          disMachine: '192.168.2.2',
+          owner: 'admin'
+        }, {
+          id: 6,
+          name: '迁移任务7',
+          status: '迁移失败',
+          workMachine: '192.168.2.1',
+          disMachine: '192.168.2.2',
+          owner: 'admin'
+        }, {
+          id: 7,
+          name: '迁移任务8',
+          status: '迁移失败',
+          workMachine: '192.168.2.1',
+          disMachine: '192.168.2.2',
+          owner: 'admin'
+        }, {
+          id: 8,
+          name: '迁移任务9',
+          status: '迁移失败',
+          workMachine: '192.168.2.1',
+          disMachine: '192.168.2.2',
+          owner: 'admin'
+        }, {
+          id: 9,
+          name: '迁移任务10',
+          status: '迁移失败',
+          workMachine: '192.168.2.1',
+          disMachine: '192.168.2.2',
+          owner: 'admin'
+        }, {
+          id: 10,
+          name: '迁移任务11',
+          status: '迁移失败',
+          workMachine: '192.168.2.1',
+          disMachine: '192.168.2.2',
+          owner: 'admin'
+        }, {
+          id: 11,
+          name: '迁移任务12',
+          status: '迁移失败',
+          workMachine: '192.168.2.1',
+          disMachine: '192.168.2.2',
+          owner: 'admin'
+        }, {
+          id: 12,
+          name: '迁移任务13',
+          status: '迁移失败',
+          workMachine: '192.168.2.1',
+          disMachine: '192.168.2.2',
+          owner: 'admin'
+        }, {
+          id: 13,
+          name: '迁移任务14',
+          status: '迁移失败',
+          workMachine: '192.168.2.1',
+          disMachine: '192.168.2.2',
+          owner: 'admin'
+        }, {
+          id: 14,
+          name: '迁移任务15',
+          status: '迁移失败',
+          workMachine: '192.168.2.1',
+          disMachine: '192.168.2.2',
+          owner: 'admin'
+        }, {
+          id: 15,
+          name: '迁移任务16',
+          status: '迁移失败',
+          workMachine: '192.168.2.1',
+          disMachine: '192.168.2.2',
+          owner: 'admin'
+        }, {
+          id: 16,
+          name: '迁移任务17',
+          status: '迁移失败',
+          workMachine: '192.168.2.1',
+          disMachine: '192.168.2.2',
+          owner: 'admin'
+        }, {
+          id: 17,
+          name: '迁移任务18',
+          status: '迁移失败',
+          workMachine: '192.168.2.1',
+          disMachine: '192.168.2.2',
+          owner: 'admin'
+        }, {
+          id: 18,
+          name: '迁移任务19',
+          status: '迁移失败',
+          workMachine: '192.168.2.1',
+          disMachine: '192.168.2.2',
+          owner: 'admin'
+        }, {
+          id: 19,
+          name: '迁移任务20',
+          status: '迁移失败',
+          workMachine: '192.168.2.1',
+          disMachine: '192.168.2.2',
+          owner: 'admin'
+        }, {
+          id: 20,
+          name: '迁移任务21',
+          status: '迁移失败',
+          workMachine: '192.168.2.1',
+          disMachine: '192.168.2.2',
+          owner: 'admin'
+        }, {
+          id: 21,
+          name: '迁移任务22',
+          status: '迁移失败',
+          workMachine: '192.168.2.1',
+          disMachine: '192.168.2.2',
+          owner: 'admin'
+        }, {
+          id: 22,
+          name: '迁移任务23',
+          status: '迁移失败',
+          workMachine: '192.168.2.1',
+          disMachine: '192.168.2.2',
+          owner: 'admin'
+        }, {
+          id: 23,
+          name: '迁移任务24',
+          status: '迁移失败',
+          workMachine: '192.168.2.1',
+          disMachine: '192.168.2.2',
+          owner: 'admin'
+        }, {
+          id: 24,
+          name: '迁移任务25',
+          status: '迁移失败',
+          workMachine: '192.168.2.1',
+          disMachine: '192.168.2.2',
+          owner: 'admin'
+        }, {
+          id: 25,
+          name: '迁移任务26',
+          status: '迁移失败',
+          workMachine: '192.168.2.1',
+          disMachine: '192.168.2.2',
+          owner: 'admin'
+        }, {
+          id: 26,
+          name: '迁移任务27',
+          status: '迁移失败',
+          workMachine: '192.168.2.1',
+          disMachine: '192.168.2.2',
+          owner: 'admin'
+        }, {
+          id: 27,
+          name: '迁移任务28',
+          status: '迁移失败',
+          workMachine: '192.168.2.1',
+          disMachine: '192.168.2.2',
+          owner: 'admin'
+        }, {
+          id: 28,
+          name: '迁移任务29',
+          status: '迁移失败',
+          workMachine: '192.168.2.1',
+          disMachine: '192.168.2.2',
+          owner: 'admin'
+        }, {
+          id: 29,
+          name: '迁移任务30',
+          status: '迁移失败',
+          workMachine: '192.168.2.1',
+          disMachine: '192.168.2.2',
+          owner: 'admin'
+        }, {
+          id: 30,
+          name: '迁移任务31',
+          status: '迁移失败',
+          workMachine: '192.168.2.1',
+          disMachine: '192.168.2.2',
+          owner: 'admin'
+        }, {
+          id: 31,
+          name: '迁移任务32',
+          status: '迁移失败',
+          workMachine: '192.168.2.1',
+          disMachine: '192.168.2.2',
+          owner: 'admin'
+        }, {
+          id: 32,
+          name: '迁移任务33',
+          status: '迁移失败',
+          workMachine: '192.168.2.1',
+          disMachine: '192.168.2.2',
+          owner: 'admin'
+        }, {
+          id: 33,
+          name: '迁移任务34',
+          status: '迁移失败',
+          workMachine: '192.168.2.1',
+          disMachine: '192.168.2.2',
+          owner: 'admin'
+        }, {
+          id: 34,
+          name: '迁移任务35',
+          status: '迁移失败',
+          workMachine: '192.168.2.1',
+          disMachine: '192.168.2.2',
+          owner: 'admin'
+        }, {
+          id: 35,
+          name: '迁移任务36',
+          status: '迁移失败',
+          workMachine: '192.168.2.1',
+          disMachine: '192.168.2.2',
+          owner: 'admin'
+        }, {
+          id: 36,
+          name: '迁移任务37',
+          status: '迁移失败',
+          workMachine: '192.168.2.1',
+          disMachine: '192.168.2.2',
+          owner: 'admin'
+        }, {
+          id: 37,
+          name: '迁移任务38',
+          status: '迁移失败',
+          workMachine: '192.168.2.1',
+          disMachine: '192.168.2.2',
+          owner: 'admin'
+        }, {
+          id: 38,
+          name: '迁移任务39',
+          status: '迁移失败',
+          workMachine: '192.168.2.1',
+          disMachine: '192.168.2.2',
+          owner: 'admin'
+        }, {
+          id: 39,
+          name: '迁移任务40',
+          status: '迁移失败',
+          workMachine: '192.168.2.1',
+          disMachine: '192.168.2.2',
+          owner: 'admin'
+        }
+      ]
     }
   },
   methods: {
@@ -444,34 +773,35 @@ export default {
       }
       return ''
     },
+    /* 勾选checkbox */
     handleSelectionChange: function (rows) {
       this.multipleSelection = rows
-      console.log(this.multipleSelection)
     },
+    /* 表格btn操作 */
     btnOperate (operatBtn, index, row) {
       switch (operatBtn) {
         case 'start':
-          console.log('start' + ' row ' + index + '-----' + JSON.stringify(row))
+          console.log(`start row ${index} ----- ${JSON.stringify(row)}`)
           this.start(index, row)
           break
         case 'stop':
-          console.log('stop' + ' row ' + index + '-----' + JSON.stringify(row))
+          console.log(`stop row ${index} ----- ${JSON.stringify(row)}`)
           this.stop(index, row)
           break
         case 'delete':
-          console.log('delete' + ' row ' + index + '-----' + JSON.stringify(row))
+          console.log(`delete row ${index} ----- ${JSON.stringify(row)}`)
           this.delete(index, row)
           break
         case 'view':
-          console.log('view' + ' row ' + index + '-----' + JSON.stringify(row))
+          console.log(`view row ${index} ----- ${JSON.stringify(row)}`)
           this.view(index, row)
           break
         case 'migration':
-          console.log('migration' + ' row ' + index + '-----' + JSON.stringify(row))
+          console.log(`migration row ${index} ----- ${JSON.stringify(row)}`)
           this.migration(index, row)
           break
         case 'restart':
-          console.log('restart' + ' row ' + index + '-----' + JSON.stringify(row))
+          console.log(`restart row ${index} ----- ${JSON.stringify(row)}`)
           this.restart(index, row)
           break
         default:
@@ -487,17 +817,9 @@ export default {
     handleSizeChange (val) {
       this.pageSize = val
       this.currentPage = 1
-      this.getTasks()
-      console.log(`每页： ${val} 条`)
     },
     handleCurrentChange (val) {
       this.currentPage = val
-      this.getTasks()
-      console.log(`当前页: ${val}`)
-    },
-    getTasks () {
-      this.table_migration = this.table_data.slice((this.currentPage - 1) * this.pageSize, (this.currentPage - 1) * this.pageSize + this.pageSize)
-      console.log(this.table_migration)
     }
   }
 }
@@ -505,6 +827,15 @@ export default {
 <style lang="">
 .tasks-card .el-card__body {
   padding: 20px 0;
+}
+.tasks-card .search-wrap {
+  margin: 0 20px 20px;
+}
+.tasks-card .el-select .el-input {
+  width: 90px;
+}
+.tasks-card .el-select .el-input input {
+  text-align: center;
 }
 .mg-header {
   font-size: 18px;

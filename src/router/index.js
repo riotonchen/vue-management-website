@@ -16,6 +16,10 @@ const router = new Router({
   mode: 'history', // 该模式下没有#前缀，而且可以使用pushState和replaceState来管理记录
   routes: [
     {
+      path: '*',
+      redirect: '/login'
+    },
+    {
       path: '/',
       redirect: '/login'
     },
